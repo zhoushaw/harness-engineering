@@ -19,6 +19,8 @@ npm run dev
 
 `npm run build` 会进行 TypeScript 检查并输出静态站点到 `dist/`。
 
+GitHub Pages 使用仓库中的 `site/` 构建产物。修改页面后运行 `npm run prepare:pages` 并提交 `site/`；推送到 `main` 后由 GitHub Actions 自动发布。首次部署时 GitHub runner 的 `npm ci` 两次失败，因此部署工作流直接上传已在本地验证的静态文件。
+
 演示支持播放、暂停、单步切换、时间线跳转和键盘左右键；空格键可播放或暂停。动画与数字是**教学示意**，无需 API Key，也不会对 Codex 或 Jev 发起真实请求。页面中的百分比表示示意场景里的相对上下文占用，不能当作性能基准。
 
 ## 概念边界
