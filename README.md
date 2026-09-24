@@ -1,8 +1,10 @@
 # Harness Atlas
 
-用统一的交互动画解释 Agent Harness 的上下文管理设计模式。首版覆盖：
+用统一的交互动画解释 Agent Harness 设计模式。首页是可扩展的策略目录，每条策略有独立详情页与左侧导航。当前覆盖：
 
 **在线体验：** [zhoushaw.github.io/harness-engineering](https://zhoushaw.github.io/harness-engineering/)
+
+直接进入：[上下文压缩](https://zhoushaw.github.io/harness-engineering/#/patterns/context-compaction) · [Jev 工具记录筛选](https://zhoushaw.github.io/harness-engineering/#/patterns/jev-tool-pruning) · [Jev 网页证据过滤](https://zhoushaw.github.io/harness-engineering/#/patterns/jev-web-evidence)
 
 ![Harness Atlas 首页预览](docs/preview.png)
 
@@ -21,12 +23,12 @@ npm run dev
 
 GitHub Pages 使用仓库中的 `site/` 构建产物。修改页面后运行 `npm run prepare:pages` 并提交 `site/`；推送到 `main` 后由 GitHub Actions 自动发布。首次部署时 GitHub runner 的 `npm ci` 两次失败，因此部署工作流直接上传已在本地验证的静态文件。
 
-演示支持播放、暂停、单步切换、时间线跳转和键盘左右键；空格键可播放或暂停。动画与数字是**教学示意**，无需 API Key，也不会对 Codex 或 Jev 发起真实请求。页面中的百分比表示示意场景里的相对上下文占用，不能当作性能基准。
+演示支持播放、暂停、单步切换、时间线跳转和键盘左右键；空格键可播放或暂停。上下文压缩从空窗口开始，逐步展示用户输入、LLM 响应、tool call、tool result、80% 触发点、摘要生成、旧窗口清空与新窗口继续。动画与数字是**教学示意**，无需 API Key，也不会对 Codex 或 Jev 发起真实请求。页面中的百分比表示示意场景里的相对上下文占用，不能当作性能基准。
 
 ## 概念边界
 
 - “硬切”演示的是 Codex 模型配置中可选的实验性新窗口路径：先保存进度 notes，下一窗口依靠 notes / history 恢复上下文。它并非所有 Codex 会话的默认压缩行为。
-- “摘要”演示的是本地文本摘要桥接。OpenAI Responses API 的服务端与独立 `/responses/compact` 还支持 opaque compaction item；页面脚注指出这一差异。
+- “摘要”演示的是本地文本摘要桥接。OpenAI Responses API 的服务端与独立 `/responses/compact` 还支持 opaque compaction item；两者不应被理解成同一种实现。
 - Jev 是**决策层**。工具执行、网页抓取、分段、阈值策略与低置信度回退由 Harness 负责。Jev 筛选流程是可实现的架构示意，并未声称 Codex 原生集成了 Jev。
 - 删除工具历史时要保持 tool call 与 result 配对；不能把模型仍需引用的错误、文件路径或用户约束当成噪声。
 
@@ -42,7 +44,7 @@ GitHub Pages 使用仓库中的 `site/` 构建产物。修改页面后运行 `np
 
 ## 后续可扩展
 
-每个模式沿用 `输入 → 判断 → 输出 → 影响` 的结构。新增模式时，在 `src/main.ts` 中增加 scene 数据与图解组件，并在 `src/style.css` 中复用相同的颜色语义和时间线状态。若后续加入真实 Jev 调用，应另建服务端代理，避免在前端暴露 API Key，并让评分、阈值、回退策略可审计。
+每个模式沿用 `输入 → 判断 → 输出 → 影响` 的结构。新增模式时，在 `src/app.ts` 的 `strategies` 数据中登记标题、分类、步骤与资料，增加对应的场景组件；侧栏和首页目录会自动收录。页面用 hash 路由，适配 GitHub Pages 子路径。样式与动效在 `src/atlas.css` 中。若后续加入真实 Jev 调用，应另建服务端代理，避免在前端暴露 API Key，并让评分、阈值、回退策略可审计。
 
 ## License
 
