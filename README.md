@@ -2,6 +2,8 @@
 
 用统一的交互动画解释 Agent Harness 的上下文管理设计模式。首版覆盖：
 
+**在线体验：** [zhoushaw.github.io/harness-engineering](https://zhoushaw.github.io/harness-engineering/)
+
 ![Harness Atlas 首页预览](docs/preview.png)
 
 1. **Codex 上下文交接**：新窗口硬切与摘要桥接两种不同路径。
